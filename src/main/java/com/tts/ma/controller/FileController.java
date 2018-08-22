@@ -48,7 +48,7 @@ public class FileController {
                     //        new File(file.getOriginalFilename())));
                     //stream.write(bytes);
                     //stream.close();
-                    hvdAuditor.addHVD();
+                    //hvdAuditor.addHVD();
                 } catch (Exception e) {
                     stream = null;
                     return "You failed to upload " + i + " => "

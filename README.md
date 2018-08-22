@@ -45,3 +45,12 @@ personal.newAccount("root");
 ```bash
 geth -targetgaslimit 4294967295 -rpc -rpcaddr "127.0.0.1" -rpcport "8545" -port "30301" -rpcapi "eth,web3,personal" -networkid 2018 -identity 2018 -nodiscover -maxpeers 5 -datadir "%cd%\chain" -unlock 0 -rpccorsdomain "*" -mine console
 ```
+
+5. 监控
+
+```bash
+geth monitor chain/inserts/AvgRate01Min chain/inserts/AvgRate05Min chain/inserts/AvgRate15Min chain/inserts/MeanRate chain/inserts/Overall chain/inserts/Percentiles/20 chain/inserts/Percentiles/5 chain/inserts/Percentiles/50 chain/inserts/Percentiles/80 chain/inserts/Percentiles/95
+
+
+geth monitor [--attach=api-endpoint] metric1 metric2 ... metricN
+```
