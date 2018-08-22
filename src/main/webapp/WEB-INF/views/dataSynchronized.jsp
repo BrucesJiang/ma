@@ -1,18 +1,15 @@
 <%--
   Created by IntelliJ IDEA.
   User: Bruce Jiang
-  Date: 2018/8/20
-  Time: 20:15
+  Date: 2018/8/22
+  Time: 15:00
   To change this template use File | Settings | File Templates.
 --%>
 <%@ page language="java" contentType="text/html;charset=UTF-8" pageEncoding="UTF-8" %>
 <%@ page isELIgnored="false" %>
-<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-<!DOCTYPE html>
 <html>
 <head>
-    <title>Title</title>
-    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 
     <!-- Required Stylesheets -->
     <link rel="stylesheet" type="text/css" href="css/reset.css" media="screen" />
@@ -65,97 +62,79 @@
     <script type="text/javascript" src="plugins/spinner/ui.spinner.js"></script>
     <script type="text/javascript" src="js/jquery-ui.js"></script>
 
+    <script type="text/javascript" src="plugins/elfinder/js/elfinder.min.js"></script>
+
+    <script type="text/javascript" src="plugins/plupload/plupload.js"></script>
+    <script type="text/javascript" src="plugins/plupload/plupload.flash.js"></script>
+    <script type="text/javascript" src="plugins/plupload/plupload.html4.js"></script>
+    <script type="text/javascript" src="plugins/plupload/plupload.html5.js"></script>
+    <script type="text/javascript" src="plugins/plupload/jquery.plupload.queue/jquery.plupload.queue.js"></script>
+
+    <link rel="stylesheet" href="plugins/plupload/jquery.plupload.queue.css" />
+    <link rel="stylesheet" href="plugins/elfinder/css/elfinder.css" />
+
     <script type="text/javascript" src="js/mws.js"></script>
     <script type="text/javascript" src="js/demo.js"></script>
     <script type="text/javascript" src="js/themer.js"></script>
 
-    <title>Table</title>
-    <script type="text/javascript">
-        /*
-         * 是否全选
-         */
-        function selectOrClearAllCheckbox(obj) {
-            var checkStatus = $(obj).attr("checked");
-            if (checkStatus == "checked") {
-                $("input[type='checkbox']").attr("checked", true);
-            } else {
-                $("input[type='checkbox']").attr("checked", false);
-            }
-        }
+    <script type="text/javascript" src="js/demo.files.js"></script>
 
+    <title>Files</title>
 
-        /** 刷新 **/
-        function refresh(){
-            $("#submitForm").attr("action", "/all").submit();
-        }
-
-        /** 审计 **/
-        function batchAudit(){
-            if($("input[name='IDCheck']:checked").size()<=0){
-                alert("Note:\n  At least one item must be selected");
-                return;
-            }
-            //var check = []; // 定义空数组
-            //$("input[name='IDCheck']:checked").each(function (i) { // 把所有被选中的复选框的值存入数组
-            //    check[i] = $(this).val();
-            //    alert(check[i]);
-            //});
-            if(confirm("Audit Now？")){
-                // 提交form
-                $("#submitForm").attr("action", "/audit").submit();
-                //$.ajax({
-                //    url:"${pageContext.request.contextPath}/audit",
-                //    type:"POST",
-                //    data:{"check": check},
-                //    success:function(result){
-                //        console.log(result);//打印服务端返回的数据(调试用)
-                //        if (result.resultCode == 200) {
-                //            alert("SUCCESS");
-                //        };
-                //    },
-                //    error:function(e){
-                //        alert("错误！！");
-                //    }
-                //});
-            }
-        }
-    </script>
 </head>
-<body>
-<!-- Header Wrapper -->
-<div id="mws-header" class="clearfix">
 
-    <!-- Logo Wrapper -->
+<body>
+
+<div id="mws-themer">
+    <div id="mws-themer-hide"></div>
+    <div id="mws-themer-content">
+        <div class="mws-themer-section">
+            <label for="mws-theme-presets">Presets</label> <select id="mws-theme-presets"></select>
+        </div>
+        <div class="mws-themer-separator"></div>
+        <div class="mws-themer-section">
+            <ul>
+                <li><span>Base Color</span> <div id="mws-base-cp" class="mws-cp-trigger"></div></li>
+                <li><span>Text Color</span> <div id="mws-text-cp" class="mws-cp-trigger"></div></li>
+                <li><span>Text Glow Color</span> <div id="mws-textglow-cp" class="mws-cp-trigger"></div></li>
+            </ul>
+        </div>
+        <div class="mws-themer-separator"></div>
+        <div class="mws-themer-section">
+            <ul>
+                <li><span>Text Glow Opacity</span> <div id="mws-textglow-op"></div></li>
+            </ul>
+        </div>
+        <div class="mws-themer-separator"></div>
+        <div class="mws-themer-section">
+            <button class="mws-button red small" id="mws-themer-getcss">Get CSS</button>
+        </div>
+    </div>
+    <div id="mws-themer-css-dialog">
+        <div class="mws-form">
+            <div class="mws-form-row" style="padding:0;">
+                <div class="mws-form-item">
+                    <textarea cols="auto" rows="auto" readonly="readonly"></textarea>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="mws-header" class="clearfix">
     <div id="mws-logo-container">
         <div id="mws-logo-wrap">
             <img src="images/mws-logo.png" alt="mws admin" />
         </div>
     </div>
 
-    <!-- User Area Wrapper -->
     <div id="mws-user-tools" class="clearfix">
-
-        <!-- User Notifications -->
         <div id="mws-user-notif" class="mws-dropdown-menu">
             <a href="#" class="mws-i-24 i-alert-2 mws-dropdown-trigger">Notifications</a>
             <span class="mws-dropdown-notif">35</span>
             <div class="mws-dropdown-box">
                 <div class="mws-dropdown-content">
                     <ul class="mws-notifications">
-
-                        <!-- Notification Content -->
-                        <li class="read">
-                            <a href="#">
-                                <span class="message">
-                                    Lorem ipsum dolor sit amet consectetur adipiscing elit, et al commore
-                                </span>
-                                <span class="time">
-                                    January 21, 2012
-                                </span>
-                            </a>
-                        </li>
-                        <!-- End Notification Content -->
-
                     </ul>
                     <div class="mws-dropdown-viewall">
                         <a href="#">View All Notifications</a>
@@ -163,29 +142,12 @@
                 </div>
             </div>
         </div>
-
-        <!-- User Messages -->
         <div id="mws-user-message" class="mws-dropdown-menu">
             <a href="#" class="mws-i-24 i-message mws-dropdown-trigger">Messages</a>
             <span class="mws-dropdown-notif">35</span>
             <div class="mws-dropdown-box">
                 <div class="mws-dropdown-content">
                     <ul class="mws-messages">
-
-                        <!-- Message Content -->
-                        <li class="read">
-                            <a href="#">
-                                <span class="sender">John Doe</span>
-                                <span class="message">
-                                    Lorem ipsum dolor sit amet consectetur adipiscing elit, et al commore
-                                </span>
-                                <span class="time">
-                                    January 21, 2012
-                                </span>
-                            </a>
-                        </li>
-                        <!-- End Messages -->
-
                     </ul>
                     <div class="mws-dropdown-viewall">
                         <a href="#">View All Messages</a>
@@ -193,8 +155,6 @@
                 </div>
             </div>
         </div>
-
-        <!-- User Functions -->
         <div id="mws-user-info" class="mws-inset">
             <div id="mws-user-photo">
                 <img src="example/profile.jpg" alt="User Photo" />
@@ -209,83 +169,54 @@
                 </ul>
             </div>
         </div>
-        <!-- End User Functions -->
-
     </div>
 </div>
+
 <div id="mws-wrapper">
-    <!-- Necessary markup, do not remove -->
     <div id="mws-sidebar-stitch"></div>
     <div id="mws-sidebar-bg"></div>
-
-    <!-- Sidebar Wrapper -->
     <div id="mws-sidebar">
-
-        <!-- Search Box -->
         <div id="mws-searchbox" class="mws-inset">
             <form action="#">
                 <input type="text" class="mws-search-input" />
                 <input type="submit" class="mws-search-submit" />
             </form>
         </div>
-
-        <!-- Main Navigation -->
         <div id="mws-navigation">
             <ul>
-                <li class="active"><a href="/index" class="mws-i-24 i-home">Dashboard</a></li>
+                <li><a href="/index" class="mws-i-24 i-home">Dashboard</a></li>
                 <li><a href="/chart" class="mws-i-24 i-chart">Charts</a></li>
                 <li><a href="/calendar" class="mws-i-24 i-day-calendar">Calendar</a></li>
-                <li><a href="/file" class="mws-i-24 i-file-cabinet">File Manager</a></li>
+                <li class="active"><a href="/file" class="mws-i-24 i-file-cabinet">File Manager</a></li>
             </ul>
         </div>
-        <!-- End Navigation -->
-
     </div>
+
     <div id="mws-container" class="clearfix">
         <div class="container">
             <div class="mws-panel grid_8">
                 <div class="mws-panel-header">
-                    <span class="mws-i-24 i-table-1">Data Table with Numbered Pagination</span>
+                    <span class="mws-i-24 i-file-cabinet">File Manager</span>
                 </div>
-                <form id="submitForm" name="submitForm" action="" method="post">
-                    <div class="mws-panel-body">
-                        <div class="mws-panel-toolbar top clearfix">
-                            <ul>
-                                <li><a  class="mws-ic-16 ic-accept" onclick="batchAudit();">Audit</a></li>
-                                <li><a class="mws-ic-16 ic-arrow-refresh" onclick="refresh();">Refresh</a></li>
-                            </ul>
-                        </div>
-                        <table class="mws-datatable-fn mws-table">
-                            <thead>
-                            <tr>
-                                <th><input type="checkbox" id="all" onclick="selectOrClearAllCheckbox(this);"/></th>
-                                <th>INDEX</th>
-                                <th>HVD</th>
-                                <th>SALT</th>
-                                <th>SIZE</th>
-                                <th>LAST AUDIT TIME</th>
-                                <th>STATE</th>
-                                <th>More Information</th>
-                            </tr>
-                            </thead>
-                            <tbody>
-                                <c:forEach var = "item" items="${list}">
-                                <tr>
-                                    <td><input type="checkbox" name="IDCheck" value="${item.index}"/></td>
-                                    <td>${item.index}</td>
-                                    <td>${item.hvd}</td>
-                                    <td>${item.salt}</td>
-                                    <td>${item.size}</td>
-                                    <td>${item.lastAuditTime}</td>
-                                    <td>${item.state}</td>
-                                    <td><a class="mws-report-icon" href="/detail/${item.index}" >Detail Info</a></td>
-                                </tr>
-                                </c:forEach>
-                            </tbody>
-                        </table>
+                <div id="elfinder"></div>
+            </div>
+
+            <div class="mws-panel grid_8">
+                <div class="mws-panel-header">
+                    <span class="mws-i-24 i-upload">File Uploader</span>
+                </div>
+                <form method="POST" enctype="multipart/form-data" action="/batch/upload">
+                <div class="mws-panel-body">
+                    <div id="uploader">
+                        <p>You browser doesn't have Flash, Silverlight, Gears, BrowserPlus or HTML5 support.</p>
                     </div>
+                </div>
                 </form>
             </div>
+        </div>
+
+        <div id="mws-footer">
+            Copyright &copy; Bruce Jiang <a href="#" target="_blank" title="Bruce Jiang">Bruce Jiang</a>
         </div>
     </div>
 </div>

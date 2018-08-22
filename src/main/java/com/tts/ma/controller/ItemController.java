@@ -4,11 +4,11 @@ import com.tts.ma.dto.ItemInfo;
 import com.tts.ma.service.ItemService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -57,11 +57,10 @@ public class ItemController {
         return new ModelAndView("index");
     }
 
-    @RequestMapping("/detail")
-    public void detail(HttpServletRequest request, HttpServletResponse response) throws IOException {
-        String index = request.getParameter("index");
-        ItemInfo item = itemService.getItemById(Integer.parseInt(index));
+    @RequestMapping("/detail/{id}")
+    public ModelAndView detail(@PathVariable String id, HttpServletRequest request) throws IOException {
+        ItemInfo item = itemService.getItemById(Integer.parseInt(id));
         request.setAttribute("item", item);
-        response.getWriter().write("{'status': 200}");
+        return new ModelAndView("detail");
     }
 }

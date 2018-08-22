@@ -5281,7 +5281,7 @@
 				for ( i=0, iLen=oSettings.aLengthMenu.length ; i<iLen ; i++ )
 				{
 					sStdMenu += '<option value="'+oSettings.aLengthMenu[i]+'">'+
-						oSettings.aLengthMenu[i]+'</option>';
+						oSettings.aLengthMenu[i]+'</opt ion>';
 				}
 			}
 			sStdMenu += '</select>';
