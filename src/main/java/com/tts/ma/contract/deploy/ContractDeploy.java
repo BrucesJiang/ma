@@ -2,6 +2,7 @@ package com.tts.ma.contract.deploy;
 
 import com.tts.ma.contract.ct.HVDAuditor;
 import com.tts.ma.contract.utils.Constants;
+import com.tts.ma.utils.Utils;
 import org.web3j.crypto.Credentials;
 import org.web3j.crypto.WalletUtils;
 import org.web3j.protocol.Web3j;
@@ -96,7 +97,7 @@ public class ContractDeploy {
                     while((len = bufferedInputStream.read(buffer)) != 0) {
                         System.out.println(buffer);
                         int salt = 2 << (random.nextInt(10));
-                        String hvd = getSHA256(new String(buffer) + salt);
+                        String hvd = Utils.getSHA256(new String(buffer) + salt);
                         System.out.println("hvd = " + hvd);
                         System.out.println("salt = " + salt);
 
@@ -115,39 +116,5 @@ public class ContractDeploy {
                 }
             });
         }
-    }
-
-    /**
-     *  利用java原生的摘要实现SHA256加密
-     * @param str 加密后的报文
-     * @return
-     */
-    public static String getSHA256(String str){
-        MessageDigest messageDigest;
-        String encodeStr = "";
-        try {
-            messageDigest = MessageDigest.getInstance("SHA-256");
-            messageDigest.update(str.getBytes("UTF-8"));
-            encodeStr = byte2Hex(messageDigest.digest());
-        } catch (NoSuchAlgorithmException e) {
-            e.printStackTrace();
-        } catch (UnsupportedEncodingException e) {
-            e.printStackTrace();
-        }
-        return encodeStr;
-    }
-
-    private static String byte2Hex(byte[] bytes){
-        StringBuffer stringBuffer = new StringBuffer();
-        String temp = null;
-        for (int i=0;i<bytes.length;i++){
-            temp = Integer.toHexString(bytes[i] & 0xFF);
-            if (temp.length()==1){
-                //1得到一位的进行补0操作
-                stringBuffer.append("0");
-            }
-            stringBuffer.append(temp);
-        }
-        return stringBuffer.toString();
     }
 }

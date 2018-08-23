@@ -11,7 +11,7 @@ public class ItemInfo {
     private String username;
     private String hvd;
     private String salt;
-    private String size;
+    private int size;
     private String belongTo;
     private String remoteAddr;
     private String lastAuditTime;
@@ -53,11 +53,11 @@ public class ItemInfo {
         this.salt = salt;
     }
 
-    public String getSize() {
+    public int getSize() {
         return size;
     }
 
-    public void setSize(String size) {
+    public void setSize(int size) {
         this.size = size;
     }
 

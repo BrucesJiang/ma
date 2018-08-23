@@ -1,7 +1,10 @@
 package com.tts.ma.service.impl;
 
+import com.tts.ma.contract.ct.HvdAuditorContractService;
 import com.tts.ma.dto.ItemInfo;
 import com.tts.ma.service.ItemService;
+import com.tts.ma.utils.Utils;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.io.UnsupportedEncodingException;
@@ -18,6 +21,9 @@ import java.util.*;
  */
 @Service
 public class ItemServiceImpl implements ItemService{
+    @Autowired
+    HvdAuditorContractService hvdService;
+
     @Override
     public List<ItemInfo> getAllItems() {
         return data();
@@ -50,49 +56,13 @@ public class ItemServiceImpl implements ItemService{
             info.setIndex(i);
             int salt = random.nextInt();
             info.setSalt(salt + "");
-            info.setSize(random.nextInt() + "");
-            String hvd = getSHA256("haha" + salt);
+            info.setSize(random.nextInt());
+            String hvd = Utils.getSHA256("haha" + salt);
             info.setHvd(hvd);
             info.setLastAuditTime(simpleDateFormat.format(new Date().getTime()));
             list.add(info);
         }
 
         return list;
-    }
-
-
-    /**
-     *  利用java原生的摘要实现SHA256加密
-     * @param str 加密后的报文
-     * @return
-     */
-    public static String getSHA256(String str){
-        MessageDigest messageDigest;
-        String encodeStr = "";
-        try {
-            messageDigest = MessageDigest.getInstance("SHA-256");
-            messageDigest.update(str.getBytes("UTF-8"));
-            encodeStr = byte2Hex(messageDigest.digest());
-        } catch (NoSuchAlgorithmException e) {
-            e.printStackTrace();
-        } catch (UnsupportedEncodingException e) {
-            e.printStackTrace();
-        }
-        return encodeStr;
-    }
-
-    private static String byte2Hex(byte[] bytes){
-        StringBuffer stringBuffer = new StringBuffer();
-        stringBuffer.append("0x");
-        String temp = null;
-        for (int i=0;i<bytes.length;i++){
-            temp = Integer.toHexString(bytes[i] & 0xFF);
-            if (temp.length()==1){
-                //1得到一位的进行补0操作
-                stringBuffer.append("0");
-            }
-            stringBuffer.append(temp);
-        }
-        return stringBuffer.toString();
     }
 }
